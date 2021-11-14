@@ -51,3 +51,10 @@ def loginPage(request):
 def logoutUser(request):
     logout(request)
     return redirect('index')
+
+
+def redirectURL(request, hash_url):
+    url = Urls.objects.get(hash_url=hash_url)
+    url.clicks += 1
+    url.save()
+    return redirect(url.full_url)
