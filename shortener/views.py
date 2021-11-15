@@ -1,3 +1,4 @@
+from django.http import Http404
 from django.shortcuts import render, redirect
 from .forms import CreateUserForm
 from django.contrib import messages
@@ -6,14 +7,14 @@ from django.contrib.auth import authenticate, login, logout
 from .models import *
 
 
-def index(request):
-    urls = Urls.objects.order_by('created_at')
-    return render(request, 'index.html', {'urls': urls})
+def home(request):
+    urls = Url.objects.order_by('created_at')
+    return render(request, 'home.html', {'urls': urls})
 
 
 def registerPage(request):
     if request.user.is_authenticated:
-        return redirect('index')
+        return redirect('home')
     form = CreateUserForm()
 
     if request.method == 'POST':
@@ -31,7 +32,7 @@ def registerPage(request):
 
 def loginPage(request):
     if request.user.is_authenticated:
-        return redirect('index')
+        return redirect('home')
 
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -50,11 +51,14 @@ def loginPage(request):
 
 def logoutUser(request):
     logout(request)
-    return redirect('index')
+    return redirect('home')
 
 
 def redirectURL(request, hash_url):
-    url = Urls.objects.get(hash_url=hash_url)
-    url.clicks += 1
-    url.save()
-    return redirect(url.full_url)
+    try:
+        url = Url.objects.get(hash_url=hash_url)
+        url.clicks += 1
+        url.save()
+        return redirect(url.full_url)
+    except:
+        raise Http404  # That URL doesn't exists
