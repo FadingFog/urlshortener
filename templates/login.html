@@ -40,9 +40,8 @@
                                     </div>
 
                                     {% for message in messages %}
-                                        <div class="alert alert-success" role="alert">{{ message }}</div>
+                                        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
                                     {% endfor %}
-
 
                                     <div class="d-grid">
                                         <button class="btn btn-lg btn-primary btn-login text-uppercase fw-bold mb-2"
