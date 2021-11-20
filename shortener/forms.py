@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 
 from .models import Url
 
@@ -27,3 +28,22 @@ class CreateUserForm(UserCreationForm):
     class Meta:
         model = User
         fields = ['username', 'email', 'password1', 'password2']
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        try:
+            User.objects.get(email=email)
+        except User.DoesNotExist:
+            return email
+
+        raise ValidationError("A user with this email already exists.")
+
+
+class CreateUrlForm(forms.ModelForm):
+    full_url = forms.URLField(max_length=100,
+                              widget=forms.TextInput(attrs={'class': 'form-control',
+                                                            'placeholder': 'Enter the link here'}))
+
+    class Meta:
+        model = Url
+        fields = ['full_url']

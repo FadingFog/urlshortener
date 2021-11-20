@@ -1,15 +1,25 @@
 from django.http import Http404
 from django.shortcuts import render, redirect
-from .forms import CreateUserForm
+
+from .forms import CreateUserForm, CreateUrlForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 
-from .models import *
+from .models import Url
 
 
 def home(request):
-    urls = Url.objects.order_by('created_at')
-    return render(request, 'home.html', {'urls': urls})
+    form = CreateUrlForm()
+
+    if request.method == 'POST':
+        form = CreateUrlForm(request.POST)
+        if form.is_valid():
+            form.save()
+            full_url = form.cleaned_data.get('full_url')
+            messages.success(request, f'Short link successfully created!')
+
+    context = {'form': form}
+    return render(request, 'home.html', context)
 
 
 def registerPage(request):
@@ -43,7 +53,7 @@ def loginPage(request):
             login(request, username)
             return redirect('index')
         else:
-            messages.info(request, 'Username or password is incorrect')
+            messages.warning(request, 'Username or password is incorrect')
 
     context = {}
     return render(request, 'login.html', context)
@@ -56,7 +66,7 @@ def logoutUser(request):
 
 def redirectURL(request, hash_url):
     try:
-        url = Url.objects.get(hash_url=hash_url)
+        url = Url.objects.get(hash_url=hash_url)  # TODO Replace by get_object_or_404()
         url.clicks += 1
         url.save()
         return redirect(url.full_url)
