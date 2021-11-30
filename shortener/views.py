@@ -9,17 +9,19 @@ from .models import Url
 
 
 def home(request):
-    form = CreateUrlForm()
-
     if request.method == 'POST':
         form = CreateUrlForm(request.POST)
         if form.is_valid():
-            form.save()
+            url = form.save(commit=False)
+            url.owner = request.user
+            url.save()
             full_url = form.cleaned_data.get('full_url')
             messages.success(request, f'Short link successfully created!')
+            return render(request, 'home.html', {'form': form, 'f_inst': form.instance.__dict__, 'form_data': form.instance})
+    else:
+        form = CreateUrlForm()
 
-    context = {'form': form}
-    return render(request, 'home.html', context)
+    return render(request, 'home.html', {'form': form})
 
 
 def registerPage(request):
@@ -50,8 +52,8 @@ def loginPage(request):
 
         user = authenticate(request, username=username, password=password)
         if user is not None:
-            login(request, username)
-            return redirect('index')
+            login(request, user)
+            return redirect('home')
         else:
             messages.warning(request, 'Username or password is incorrect')
 

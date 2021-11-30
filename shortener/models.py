@@ -21,9 +21,9 @@ class Url(models.Model):
             while True:
                 hash_url = md5(self.full_url.encode()).hexdigest()
                 self.hash_url = ''.join(sample(hash_url, len(hash_url)))[:10]  # shuffle md5 url
-                try:
+                try:  # if hashed url already exists try again
                     _ = Url.objects.get(hash_url=hash_url)
-                except:
+                except:  # exit loop if its unique
                     return super().save(*args, **kwargs)
 
         return super().save(*args, **kwargs)
