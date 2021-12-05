@@ -1,0 +1,18 @@
+body {
+  color: #d2d2d2;
+}
+
+@media (min-width:1200px) {
+  .container, .container-lg, .container-md, .container-sm {
+    max-width: 1140px;
+  }
+}
+
+.fs-7 {
+  font-size: 18px;
+}
+
+/*.dropdown-menu[data-bs-popper] {*/
+/*  margin-top: 1rem;*/
+/*}*/
+
