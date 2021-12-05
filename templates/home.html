@@ -1,83 +1,122 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@5.1.3/dist/darkly/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700">
     <link rel="stylesheet" href="{% static "css/styles.css" %}">
     <title>
         {% block title %}
-            URL Shortener
+            ShortLink - URL Shortener
         {% endblock %}
     </title>
 </head>
-<body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-        <a class="navbar-brand" href="{% url 'home' %}">ShortLink</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span
-                class="navbar-toggler-icon"></span></button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                <li class="nav-item"><a class="nav-link" aria-current="page" href="{% url 'login' %}">Log In</a>
-                </li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Sign Up</a></li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
-                       data-bs-toggle="dropdown" aria-expanded="false">English</a> {# current language #}
-                    <ul class="dropdown-menu dropdown-menu-end text-center" aria-labelledby="navbarDropdown">
-                        {# all languages #}
-                        <li><a class="dropdown-item" href="#">English</a></li>
-                        <li><a class="dropdown-item" href="#">Russian</a></li>
-                        <li>
-                            <hr class="dropdown-divider"/>
-                        </li>
-                        <li><a class="dropdown-item" href="#">Want another language?<br>Contribute</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
-{% block content %}
 
-    <div class="container" style="max-width: 1140px">
-        <div class="text-center mt-5">
-            <h1>URL Shortener</h1>
-            <p class="lead">Enter a long URL to make a short one</p>
-            <form method="post">{% csrf_token %}
-                <div class="input-group px-3">
-                    {{ form.full_url }}
-                    <div class="input-group-append">
-                        <button class="btn btn-lg btn-primary btn-login fw-bold text-uppercase" type="submit"
-                                style="height: 4vw">Shorten
-                        </button>
+<body>
+<header>
+    <nav class="navbar navbar-dark navbar-expand-md bg-dark">
+        <div class="container"><a class="navbar-brand" href="{% url 'home' %}">ShortLink</a>
+            <button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navbar-top"><span
+                    class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbar-top">
+                <ul class="navbar-nav ms-auto">
+
+                    {% if user.is_authenticated %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'account' %}">My account</a></li>
+                    {% else %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Log In</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Sign Up</a></li>
+                    {% endif %}
+
+                    <li class="nav-item dropdown">
+                        <a class="dropdown-toggle nav-link" aria-expanded="false"
+                           data-bs-toggle="dropdown" href="#">English</a> {# current language #}
+                        <div class="dropdown-menu dropdown-menu-dark">
+                            <a class="dropdown-item active" href="#">English</a>
+                            <a class="dropdown-item" href="#">Russian</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+{% block content %}
+    <main>
+        <section class="main">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-12 text-center mt-5">
+                        <h2>URL Shortener</h2>
+                    </div>
+
+                    <div class="col-12 text-center mt-4 mb-3">
+                        <p class="lead">Enter a long URL to make a short one</p>
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="input-group input-group-lg">
+                                {{ form.full_url }}
+                                <button class="btn btn-primary" type="submit">Shorten</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
+            </div>
 
-                {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }} d-inline-flex p-2 my-1">{{ message }}</div>
-                {% endfor %}
-                {% if form.errors %}
-                    <div class="alert alert-danger">
-                        {% for field in form %}
-                            {% for error in field.errors %}
-                                {{ error|escape }}
+            <div id="results" class="container mt-4 {% if not messages and not form.errors %}d-none{% endif %}">
+                <div class="row">
+                    <div class="col-12">
+
+                        {% if form.errors %}
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    <div id="errors" class="alert alert-danger text-center p-2">
+                                        {{ error|escape }}
+                                    </div>
+                                {% endfor %}
                             {% endfor %}
-                        {% endfor %}
+                        {% endif %}
+
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-{{ message.tags }} text-center p-2">{{ message }}</div>
+                            {% endfor %}
+                            <div id="link-info">
+                                <ul class="list-group">
+                                    <li id="link"
+                                        class="list-group-item d-flex justify-content-between align-items-center fs-7 p-4 pt-3">
+                                        <span class="full-link">{{ form_data.full_url }}</span>
+                                        <span>
+                                        <span class="short-link pe-4">
+                                            <a href="{{ form_data.hash_url }}"
+                                               target="_blank">{{ request.build_absolute_uri }}{{ form_data.hash_url }}</a>
+                                        </span>
+                                        <span class="copy">
+                                            <button class="btn btn-secondary">Copy</button>
+                                        </span>
+                                    </span>
+                                    </li>
+                                    <li id="promo"
+                                        class="list-group-item d-flex justify-content-center align-items-center py-3">
+                                        <h4>Want to customize and track your links? Just <a href="#">register</a></h4>
+                                    </li>
+                                </ul>
+                            </div>
+                        {% endif %}
                     </div>
-                {% endif %}
+                </div>
+            </div>
 
-
-            </form>
-        </div>
-    </div>
-
+        </section>
+    </main>
 {% endblock %}
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
 </body>
+
 </html>
