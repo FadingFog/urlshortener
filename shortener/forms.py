@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 
@@ -37,6 +37,16 @@ class CreateUserForm(UserCreationForm):
             return email
 
         raise ValidationError("A user with this email already exists.")
+
+
+class LoginUserForm(forms.Form):
+    username = forms.CharField(max_length=100,
+                               widget=forms.TextInput(attrs={'class': 'form-control',
+                                                             'id': 'floatingInputUsername',
+                                                             'placeholder': 'myusername'}))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control',
+                                                                 'id': 'floatingPassword',
+                                                                 'placeholder': 'Password'}))
 
 
 class CreateUrlForm(forms.ModelForm):

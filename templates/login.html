@@ -1,64 +1,56 @@
 {% extends 'home.html' %}
 
 {% block title %}
-    Login
+    ShortLink - Login
 {% endblock %}
 
 {% block content %}
-    <div class="container-fluid ps-md-0">
-        <div class="row g-0">
-            <div class="d-none d-md-flex col-md-4 col-lg-6 bg-image"></div>
-            <div class="col-md-8 col-lg-6">
-                <div class="login d-flex align-items-center py-5">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-md-9 col-lg-8 mx-auto">
-                                <h3 class="login-heading mb-4">Welcome back!</h3>
-
-                                <!-- Sign In Form -->
-                                <form method="post">{% csrf_token %}
-                                    <div class="form-floating mb-3">
-                                        <input type="text" name="username" class="form-control" id="floatingInput"
-                                               placeholder="username">
-                                        <label for="floatingInput">Username</label>
-                                    </div>
-                                    <div class="form-floating mb-3">
-                                        <input type="password" name="password" class="form-control"
-                                               id="floatingPassword" placeholder="Password">
-                                        <label for="floatingPassword">Password</label>
-                                    </div>
-
-                                    <div class="d-flex justify-content-between form-check mb-3">
-                                        <div>
-                                            <input class="form-check-input" type="checkbox" value=""
-                                                   id="rememberPasswordCheck">
-                                            <label class="form-check-label" for="rememberPasswordCheck">Remember
-                                                password</label>
-                                        </div>
-                                        <a class="small text-decoration-none" style="color: blue" href="#">Forgot
-                                            password?</a>
-                                    </div>
-
-                                    {% for message in messages %}
-                                        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-                                    {% endfor %}
-
-                                    <div class="d-grid">
-                                        <button class="btn btn-lg btn-primary btn-login text-uppercase fw-bold mb-2"
-                                                type="submit">Sign in
-                                        </button>
-                                        <div class="text-center">
-                                            <a class="small text-decoration-none" style="color: blue"
-                                               href="{% url 'register' %}">Don't have an account?</a>
-                                        </div>
-                                    </div>
-
-                                </form>
-                            </div>
-                        </div>
+    <section class="log-in py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-8 col-md-6 col-lg-5 mx-auto">
+                    <div class="text-center mt-2 mb-4">
+                        <h3 class="fw-light">Log in and start shortening</h3>
+                        <span>Don't have an account? <a href="{% url 'register' %}" class="text-decoration-none">Sign up</a></span>
                     </div>
+
+                    <form method="post">{% csrf_token %}{{ form.non_field_errors }}
+                        <div class="form-floating mb-3">
+                            {{ form.username }}
+                            <label for="floatingInputUsername">Username</label>
+                            <p class="hint mt-1">
+                                {% for error in form.username.errors %}
+                                    {{ error|escape }}
+                                {% endfor %}
+                            </p>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            {{ form.password }}
+                            <label for="floatingPassword">Password</label>
+                            <p class="hint mt-1">
+                                {% for error in form.password.errors %}
+                                    {{ error|escape }}
+                                {% endfor %}
+                            </p>
+                        </div>
+
+                        {% for message in messages %}
+                            {% if message.level != DEFAULT_MESSAGE_LEVELS.INFO %}
+                            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                            {% endif %}
+                        {% endfor %}
+
+
+                        <div class="d-grid mb-2">
+                            <button class="btn btn-primary fw-bold text-uppercase"
+                                    type="submit">Log in
+                            </button>
+                        </div>
+
+                    </form>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 {% endblock %}
