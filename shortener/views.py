@@ -17,9 +17,9 @@ def home(request):
             if request.user.is_authenticated:
                 url.owner = request.user
             url.save()
-            full_url = form.cleaned_data.get('full_url')
+            # full_url = form.cleaned_data.get('full_url')  # Don't remember why it's here
             messages.success(request, f'Short link successfully created!')
-            return render(request, 'home.html', {'form': form, 'f_inst': form.instance.__dict__, 'form_data': form.instance})
+            return render(request, 'home.html', {'form': form, 'form_data': form.instance})
         else:
             form.fields['full_url'].widget.attrs['class'] = 'form-control is-invalid'
     else:

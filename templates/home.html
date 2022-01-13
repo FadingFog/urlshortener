@@ -106,19 +106,21 @@
                                     <div class="alert alert-{{ message.tags }} text-center p-2">{{ message }}</div>
                                 {% endif %}
                             {% endfor %}
+
                             {% if form_data %}
                                 <div id="link-info">
                                     <ul class="list-group">
                                         <li id="link"
                                             class="list-group-item d-flex justify-content-between align-items-center fs-7 p-4 pt-3">
-                                            <span class="full-link">{{ form_data.full_url }}</span>
+                                            <span id="full-link">{{ form_data.full_url }}</span>
                                             <span>
-                                        <span class="short-link pe-4">
+                                        <span class="pe-4" id="short-link">
                                             <a href="{{ form_data.hash_url }}"
                                                target="_blank">{{ request.build_absolute_uri }}{{ form_data.hash_url }}</a>
                                         </span>
                                         <span class="copy">
-                                            <button class="btn btn-secondary">Copy</button>
+                                            <button class="btn btn-secondary"
+                                                    data-clipboard-target="#short-link">Copy</button>
                                         </span>
                                     </span>
                                         </li>
@@ -144,11 +146,15 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js"></script>
 <script>
     if (window.history.replaceState) {
         window.history.replaceState(null, null, window.location.href);
     }
+
+    new ClipboardJS('.btn');
 </script>
+
 </body>
 
 </html>
