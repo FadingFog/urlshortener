@@ -27,3 +27,10 @@ class Url(models.Model):
                     return super().save(*args, **kwargs)
 
         return super().save(*args, **kwargs)
+
+
+# class UrlAnalytics(models.Model):
+#     url = models.ForeignKey(Url, on_delete=models.CASCADE)
+#     date = models.DateField(auto_now_add=True)
+#     clicks = models.IntegerField()
+

@@ -1,4 +1,4 @@
-from django.urls import path, re_path
+from django.urls import path, re_path, include
 from .views import *
 
 urlpatterns = [
@@ -8,4 +8,6 @@ urlpatterns = [
     path('login/', loginPage, name='login'),
     path('logout/', logoutUser, name='logout'),
     path('profile/', accountPage, name='account'),
+
+    path('api/', include("shortener.api.urls", namespace="api")),
 ]

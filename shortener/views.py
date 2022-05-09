@@ -1,6 +1,12 @@
+import copy
+
 from django.contrib.auth.decorators import login_required
-from django.http import Http404
+from django.http import Http404, JsonResponse
 from django.shortcuts import render, redirect
+
+from django.core import serializers
+from django.forms.models import model_to_dict
+from django.template.loader import render_to_string
 
 from .forms import CreateUserForm, CreateUrlForm, LoginUserForm
 from django.contrib import messages
@@ -12,20 +18,39 @@ from .models import Url
 def home(request):
     if request.method == 'POST':
         form = CreateUrlForm(request.POST)
+        # <== AJAX ==>
         if form.is_valid():
             url = form.save(commit=False)
             if request.user.is_authenticated:
                 url.owner = request.user
             url.save()
-            # full_url = form.cleaned_data.get('full_url')  # Don't remember why it's here
-            messages.success(request, f'Short link successfully created!')
-            return render(request, 'home.html', {'form': form, 'form_data': form.instance})
+
+            message = 'Short link successfully created!'
+            form_data = model_to_dict(form.instance)
+            html = render_to_string('results.html', {'form_data': form_data, 'message': message})
+
+            data = {'status': 'success', 'form_data': form_data, 'html': html}
+            return JsonResponse(data)
         else:
-            form.fields['full_url'].widget.attrs['class'] = 'form-control is-invalid'
+            data = {'status': 'error', 'errors': form.errors}
+            return JsonResponse(data)
+
+        # <==== OLD ====>
+
+        # if form.is_valid():
+        #     url = form.save(commit=False)
+        #     if request.user.is_authenticated:
+        #         url.owner = request.user
+        #     url.save()
+        #
+        #     messages.success(request, f'Short link successfully created!')
+        #     return render(request, 'index.html', {'form': form, 'form_data': form.instance})
+        # else:
+        #     form.fields['full_url'].widget.attrs['class'] = 'form-control is-invalid'
     else:
         form = CreateUrlForm()
 
-    return render(request, 'home.html', {'form': form})
+    return render(request, 'index.html', {'form': form})
 
 
 @login_required
@@ -33,7 +58,7 @@ def accountPage(request):
     user_urls = Url.objects.filter(owner=request.user)
 
     context = {'user_urls': user_urls}
-    return render(request, 'account.html', context)
+    return render(request, 'dashboard/account.html', context)
 
 
 def registerPage(request):
