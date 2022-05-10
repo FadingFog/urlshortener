@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('full_url', models.URLField()),
-                ('hash_url', models.URLField(unique=True)),
+                ('hash_url', models.CharField(max_length=30, unique=True)),
                 ('clicks', models.IntegerField(default=0)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('owner', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL)),
