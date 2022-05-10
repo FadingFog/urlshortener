@@ -27,9 +27,9 @@ def home(request):
 
             message = 'Short link successfully created!'
             form_data = model_to_dict(form.instance)
-            html = render_to_string('results.html', {'form_data': form_data, 'message': message})
+            html = render_to_string('results.html', {'form_data': form_data})
 
-            data = {'status': 'success', 'form_data': form_data, 'html': html}
+            data = {'status': 'success', 'message': message, 'form_data': form_data, 'html': html}
             return JsonResponse(data)
         else:
             data = {'status': 'error', 'errors': form.errors}

@@ -37,8 +37,6 @@ form.addEventListener('submit', ev => {
     const fd = new FormData()
     fd.append('full_url', full_url.value)
 
-
-
     $.ajax({
         method: 'POST',
         url: '',
@@ -51,19 +49,28 @@ form.addEventListener('submit', ev => {
         processData: false
     })
 
-    function handleFormSuccess(response){
+    function handleFormSuccess(response) {
         console.log(response)
-            if(response.status === 'success'){
-                full_url.setAttribute('class', 'form-control is-valid');
 
-                $("#link-info").replaceWith(response.html);
-                // $("#results .row .col-12").append(response.html);
+        if ($("div#results").length === 0) {
+            let result_box = '<div id="results" class="container mt-4">' +
+                '<div class="row"><div class="col-12"><div id="alert-box">' +
+                '<div id="result-message" class="alert alert-success text-center p-2"></div>' +
+                '</div></div></div></div>';
+            $("section.main").append(result_box)
+        }
 
-                $("#results").attr('class', 'container mt-4')
-            }
-            else{
-                full_url.setAttribute('class', 'form-control is-invalid')
-            }
+        if (response.status === 'success') {
+            full_url.setAttribute('class', 'form-control is-valid')
+            $("#result-message").attr('class', 'alert alert-success text-center p-2').text(response.message)
+
+            if ($("#link-info").length === 0) {$("#results .col-12").append(response.html)}
+            else {$("#link-info").replaceWith(response.html)}
+
+        } else {
+            full_url.setAttribute('class', 'form-control is-invalid')
+            $("#result-message").attr('class', 'alert alert-danger text-center p-2').text(response.errors.full_url[0])
+        }
     }
 
     function handleFormError(error){
