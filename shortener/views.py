@@ -18,16 +18,23 @@ from .models import Url
 def home(request):
     if request.method == 'POST':
         form = CreateUrlForm(request.POST)
-        # <== AJAX ==>
-        if form.is_valid():
+
+        if form.is_valid():  # AJAX
             url = form.save(commit=False)
+
             if request.user.is_authenticated:
                 url.owner = request.user
-            url.save()
+                url.save()
+            else:  # If link already exists and user not logged in - return the existing
+                try:
+                    url.hash_url = Url.objects.filter(full_url=form.cleaned_data.get('full_url'),
+                                                      owner=None).first().hash_url
+                except:
+                    url.save()
 
             message = 'Short link successfully created!'
             form_data = model_to_dict(form.instance)
-            html = render_to_string('results.html', {'form_data': form_data})
+            html = render_to_string('results.html', {'form_data': form_data, 'request': request})
 
             data = {'status': 'success', 'message': message, 'form_data': form_data, 'html': html}
             return JsonResponse(data)
@@ -35,18 +42,6 @@ def home(request):
             data = {'status': 'error', 'errors': form.errors}
             return JsonResponse(data)
 
-        # <==== OLD ====>
-
-        # if form.is_valid():
-        #     url = form.save(commit=False)
-        #     if request.user.is_authenticated:
-        #         url.owner = request.user
-        #     url.save()
-        #
-        #     messages.success(request, f'Short link successfully created!')
-        #     return render(request, 'index.html', {'form': form, 'form_data': form.instance})
-        # else:
-        #     form.fields['full_url'].widget.attrs['class'] = 'form-control is-invalid'
     else:
         form = CreateUrlForm()
 

@@ -3,7 +3,7 @@
         <li id="link" class="list-group-item d-flex justify-content-between align-items-center fs-7 p-4 pt-3">
             <span id="full-link">{{ form_data.full_url }}</span>
             <span>
-                <span class="pe-4" id="short-link">
+                <span id="short-link" class="pe-4">
                     <a href="{{ form_data.hash_url }}" target="_blank">{{ request.build_absolute_uri }}{{ form_data.hash_url }}</a>
                 </span>
                 <span class="copy">
@@ -11,8 +11,10 @@
                 </span>
             </span>
         </li>
-        <li id="promo" class="list-group-item d-flex justify-content-center align-items-center py-3">
-            <h4>Want to customize and track your links? Just <a href="{% url 'register' %}">register</a></h4>
-        </li>
+        {% if not request.user.is_authenticated %}
+            <li id="promo" class="list-group-item d-flex justify-content-center align-items-center py-3">
+                <h4>Want to customize and track your links? Just <a href="{% url 'register' %}">register</a></h4>
+            </li>
+        {% endif %}
     </ul>
 </div>
