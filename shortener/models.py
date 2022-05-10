@@ -17,7 +17,7 @@ class Url(models.Model):
         self.save()
 
     def save(self, *args, **kwargs):
-        if not self.id:
+        if not self.id:  # if not editing Url
             while True:
                 hash_url = md5(self.full_url.encode()).hexdigest()
                 self.hash_url = ''.join(sample(hash_url, len(hash_url)))[:10]  # shuffle md5 url

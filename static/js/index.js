@@ -50,22 +50,25 @@ form.addEventListener('submit', ev => {
     })
 
     function handleFormSuccess(response) {
-        console.log(response)
 
-        if ($("div#results").length === 0) {
-            let result_box = '<div id="results" class="container mt-4">' +
-                '<div class="row"><div class="col-12"><div id="alert-box">' +
-                '<div id="result-message" class="alert alert-success text-center p-2"></div>' +
-                '</div></div></div></div>';
+        if ($("div#results").length === 0) {  // if results do not exist append block
+            let result_box = ['<div id="results" class="container mt-4">',
+                '<div class="row"><div class="col-12"><div id="alert-box">',
+                '<div id="result-message" class="alert alert-success text-center p-2"></div>',
+                '</div></div></div></div>'].join('');
             $("section.main").append(result_box)
         }
 
-        if (response.status === 'success') {
+        if (response.status === 200) {
             full_url.setAttribute('class', 'form-control is-valid')
             $("#result-message").attr('class', 'alert alert-success text-center p-2').text(response.message)
 
-            if ($("#link-info").length === 0) {$("#results .col-12").append(response.html)}
-            else {$("#link-info").replaceWith(response.html)}
+            let link_info = $("#link-info")
+            if (link_info.length === 0) {
+                $("#results .col-12").append(response.html)
+            } else {
+                link_info.replaceWith(response.html)
+            }
 
         } else {
             full_url.setAttribute('class', 'form-control is-invalid')

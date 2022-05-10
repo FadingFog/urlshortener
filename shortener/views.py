@@ -36,10 +36,10 @@ def home(request):
             form_data = model_to_dict(form.instance)
             html = render_to_string('results.html', {'form_data': form_data, 'request': request})
 
-            data = {'status': 'success', 'message': message, 'form_data': form_data, 'html': html}
+            data = {'status': 200, 'message': message, 'html': html}
             return JsonResponse(data)
         else:
-            data = {'status': 'error', 'errors': form.errors}
+            data = {'status': 400, 'errors': form.errors}
             return JsonResponse(data)
 
     else:
