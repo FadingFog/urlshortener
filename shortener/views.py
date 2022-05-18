@@ -36,11 +36,11 @@ def home(request):
             form_data = model_to_dict(form.instance)
             html = render_to_string('results.html', {'form_data': form_data, 'request': request})
 
-            data = {'status': 200, 'message': message, 'html': html}
-            return JsonResponse(data)
+            data = {'message': message, 'html': html}
+            return JsonResponse(data, status=200)
         else:
-            data = {'status': 400, 'errors': form.errors}
-            return JsonResponse(data)
+            data = {'errors': form.errors.get_json_data()}
+            return JsonResponse(data, status=400)
 
     else:
         form = CreateUrlForm()
