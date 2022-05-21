@@ -10,13 +10,15 @@
         <div class="container mt-5">
             <div class="row">  {# FIXME https://getbootstrap.com/docs/5.1/components/card/#grid-cards #}
                 <div id="url-list" class="col-12">
-                    {% for object in object_list %} {# DEBUG |slice:":5" #}
+                    {% for object in object_list %}
                         <div class="card mb-2">
                             <div class="card-body">
                                 <div class="card-top d-flex justify-content-between">
                                     <div>
                                         <h4 class="card-title">Google</h4>  {# FIXME replace with user_url.title #}
-                                        <h6 class="card-subtitle mb-2 text-muted">{{ object.full_url }}</h6>
+                                        <h6 class="card-subtitle mb-2 text-muted" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ object.full_url }}">
+                                            {{ object.full_url|truncatechars:50 }}
+                                        </h6>
                                     </div>
                                     <button type="button" class="btn btn-outline-light" disabled>{{ object.created_at }}</button>
                                 </div>
