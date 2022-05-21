@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    ShortLink - Dashboard
+{% endblock %}
+
+{% block content %}
+    <section class="main">
+        <div class="container mt-5">
+            <div class="row">  {# FIXME https://getbootstrap.com/docs/5.1/components/card/#grid-cards #}
+                <div id="url-list" class="col-12">
+                    {% for object in object_list %} {# DEBUG |slice:":5" #}
+                        <div class="card mb-2">
+                            <div class="card-body">
+                                <div class="card-top d-flex justify-content-between">
+                                    <div>
+                                        <h4 class="card-title">Google</h4>  {# FIXME replace with user_url.title #}
+                                        <h6 class="card-subtitle mb-2 text-muted">{{ object.full_url }}</h6>
+                                    </div>
+                                    <button type="button" class="btn btn-outline-light" disabled>{{ object.created_at }}</button>
+                                </div>
+                                <hr>
+                                <div class="card-bottom d-flex justify-content-between align-items-center">
+                                    <a href="/{{ object.hash_url }}" class="card-link text-decoration-none" target="_blank">
+                                        http://{{ request.get_host }}/{{ object.hash_url }}
+                                    </a>
+                                    <a class="btn btn-outline-info" href="#" role="button">
+                                        <i class="bi bi-bar-chart"></i>
+                                        <span class="badge bg-info">{{ object.clicks }}</span> Clicks
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% include 'dashboard/pagination.html' %}
+    </section>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'js/dashboard.js' %}"></script>
+{% endblock %}

@@ -1,18 +1,16 @@
-import copy
-
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import Http404, JsonResponse
 from django.shortcuts import render, redirect
 
-from django.core import serializers
 from django.forms.models import model_to_dict
 from django.template.loader import render_to_string
 
-from .forms import CreateUserForm, CreateUrlForm, LoginUserForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 
 from .models import Url
+from .forms import CreateUserForm, CreateUrlForm, LoginUserForm
 
 
 def home(request):
@@ -36,11 +34,11 @@ def home(request):
             form_data = model_to_dict(form.instance)
             html = render_to_string('results.html', {'form_data': form_data, 'request': request})
 
-            data = {'status': 200, 'message': message, 'html': html}
-            return JsonResponse(data)
+            data = {'message': message, 'html': html}
+            return JsonResponse(data, status=200)
         else:
-            data = {'status': 400, 'errors': form.errors}
-            return JsonResponse(data)
+            data = {'errors': form.errors.get_json_data()}
+            return JsonResponse(data, status=400)
 
     else:
         form = CreateUrlForm()
@@ -52,8 +50,17 @@ def home(request):
 def accountPage(request):
     user_urls = Url.objects.filter(owner=request.user)
 
-    context = {'user_urls': user_urls}
-    return render(request, 'dashboard/account.html', context)
+    paginator = Paginator(user_urls, 3)
+    page = request.GET.get('page')
+    try:
+        object_list = paginator.page(page)
+    except PageNotAnInteger:
+        object_list = paginator.page(1)
+    except EmptyPage:
+        object_list = paginator.page(paginator.num_pages)
+
+    context = {'object_list': object_list}
+    return render(request, 'dashboard/dashboard.html', context)
 
 
 def registerPage(request):
