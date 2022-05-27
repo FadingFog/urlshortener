@@ -4,11 +4,11 @@
             <ul class="pagination justify-content-center">
                 {% if object_list.has_previous %}
                     <li class="page-item">
-                        <a class="page-link" href="?page={{ object_list.previous_page_number }}">&laquo;</a>
+                        <a class="page-link" href="?page={{ object_list.previous_page_number }}">&lt;</a>
                     </li>
                 {% else %}
                     <li class="page-item disabled">
-                        <a class="page-link" href="#">&laquo;</a>
+                        <a class="page-link" href="#">&lt;</a>
                     </li>
                 {% endif %} 
 
@@ -26,11 +26,11 @@
 
                 {% if object_list.has_next %}
                     <li class="page-item">
-                        <a class="page-link" href="?page={{ object_list.next_page_number }}">&raquo;</a>
+                        <a class="page-link" href="?page={{ object_list.next_page_number }}">&gt;</a>
                     </li>
                 {% else %}
                     <li class="page-item disabled">
-                        <a class="page-link" href="#">&raquo;</a>
+                        <a class="page-link" href="#">&gt;</a>
                     </li>
                 {% endif %}
             </ul>

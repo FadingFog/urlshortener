@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block content %}
-    <section class="main">
+    <section class="main py-5">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-12 text-center">
@@ -25,13 +25,13 @@
 {% endblock %}
 
 {% block script %}
-<script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js"></script>
-<script src="{% static 'js/index.js' %}"></script>
-<script>
-    if (window.history.replaceState) {
-        window.history.replaceState(null, null, window.location.href);
-     }
+    <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js"></script>
+    <script src="{% static 'js/index.js' %}"></script>
+    <script>
+        if (window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.href);
+         }
 
-    new ClipboardJS('.btn');
-</script>
+        new ClipboardJS('.btn');
+    </script>
 {% endblock script %}
