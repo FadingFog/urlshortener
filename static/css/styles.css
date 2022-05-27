@@ -62,6 +62,14 @@ p.hint {
     color: var(--bs-red);
 }
 
+div.card.reset {
+    padding: 32px;
+}
+
+div.card.reset a {
+    padding: 6px 16px;
+}
+
 /*.dropdown-menu[data-bs-popper] {*/
 /*  margin-top: 1rem;*/
 /*}*/

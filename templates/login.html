@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    ShortLink - Login
+    Login | ShortLink
 {% endblock %}
 
 {% block content %}
     <section class="log-in py-5">
         <div class="container">
             <div class="row">
-                <div class="col-sm-8 col-md-6 col-lg-5 mx-auto">
+                <div class="col-sm-8 col-md-6 col-lg-4 mx-auto">
                     <div class="text-center mt-2 mb-4">
                         <h3 class="fw-light">Log in and start shortening</h3>
                         <span>Don't have an account? <a href="{% url 'register' %}" class="text-decoration-none">Sign up</a></span>
@@ -35,6 +35,11 @@
                             </p>
                         </div>
 
+                        <div class="text-end mb-2">
+                            <a href="{% url 'password_reset' %}" class="text-decoration-none">Forgot password?</a>
+                        </div>
+
+
                         {% for message in messages %}
                             {% if message.level != DEFAULT_MESSAGE_LEVELS.INFO %}
                             <div class="alert alert-{{ message.tags }}">{{ message }}</div>
@@ -42,10 +47,8 @@
                         {% endfor %}
 
 
-                        <div class="d-grid mb-2">
-                            <button class="btn btn-primary fw-bold text-uppercase"
-                                    type="submit">Log in
-                            </button>
+                        <div class="d-grid">
+                            <button class="btn btn-primary fw-bold text-uppercase" type="submit">Log in</button>
                         </div>
 
                     </form>
