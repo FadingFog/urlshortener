@@ -63,7 +63,9 @@ form.addEventListener('submit', ev => {
     }
 
     function handleFormError(response){
-        console.log(response)
-        $('p.hint').empty().append($(response.responseText).find('p.hint').html())
+        $('p.hint').each((index, el) => {
+            let smth = $(response.responseText).find('p.hint')[index]
+            $(el).empty().append($(smth).html())
+        });
     }
 });
