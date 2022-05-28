@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import PasswordResetView, PasswordResetConfirmView
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import Http404, JsonResponse
 from django.shortcuts import render, redirect
@@ -10,7 +11,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 
 from .models import Url
-from .forms import CreateUserForm, CreateUrlForm, LoginUserForm
+from .forms import CreateUserForm, CreateUrlForm, LoginUserForm, ResetPasswordForm, SetPasswordForm
 
 
 def home(request):
@@ -46,7 +47,7 @@ def home(request):
     return render(request, 'index.html', {'form': form})
 
 
-@login_required
+@login_required(login_url='login')
 def accountPage(request):
     user_urls = Url.objects.filter(owner=request.user)
 
@@ -83,7 +84,7 @@ def registerPage(request):
 
 def loginPage(request):
     if request.user.is_authenticated:
-        messages.warning(request, 'You are already logged in')
+        messages.warning(request, 'You are already logged in')  # TODO Replace with bootstrap toasts
         return redirect('home')
 
     if request.method == 'POST':
@@ -117,3 +118,42 @@ def redirectURL(request, hash_url):
         return redirect(url.full_url)
     except:
         raise Http404  # That URL doesn't exists
+
+
+class ResetPasswordView(PasswordResetView):
+    template_name = "password_reset.html"
+    form_class = ResetPasswordForm
+
+    def form_valid(self, form):
+        opts = {
+            "use_https": self.request.is_secure(),
+            "token_generator": self.token_generator,
+            "from_email": self.from_email,
+            "email_template_name": self.email_template_name,
+            "subject_template_name": self.subject_template_name,
+            "request": self.request,
+            "html_email_template_name": self.html_email_template_name,
+            "extra_email_context": self.extra_email_context,
+        }
+        form.save(**opts)
+        return render(self.request, 'password_reset_done.html', status=200)
+
+    def form_invalid(self, form):
+        """If the form is invalid, render the invalid form."""
+        return self.render_to_response(self.get_context_data(form=form), status=404)
+
+
+class ResetPasswordConfirmView(PasswordResetConfirmView):
+    form_class = SetPasswordForm
+    template_name = 'password_reset_confirm.html'
+
+    def form_valid(self, form):
+        user = form.save()
+        del self.request.session["_password_reset_token"]
+        if self.post_reset_login:
+            login(self.request, user, self.post_reset_login_backend)
+        return render(self.request, 'password_reset_complete.html', status=200)
+
+    def form_invalid(self, form):
+        """If the form is invalid, render the invalid form."""
+        return self.render_to_response(self.get_context_data(form=form), status=404)
