@@ -1,9 +1,8 @@
 function ajaxPagination() {
     $('a.page-link').each((index, el) => {
         $(el).click((e) => {
-            e.preventDefault()
-            let page_url = $(el).attr('href')
-            console.log(page_url)
+            e.preventDefault();
+            let page_url = $(el).attr('href');
 
             $.ajax({
                 url: page_url,
@@ -18,9 +17,9 @@ function ajaxPagination() {
 }
 
 $(document).ready(function() {
-    ajaxPagination()
+    ajaxPagination();
 })
 
 $(document).ajaxStop(function() {
-    ajaxPagination()
+    ajaxPagination();
 })

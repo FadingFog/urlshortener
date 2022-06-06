@@ -8,7 +8,7 @@ from random import sample
 class Url(models.Model):
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, blank=True, null=True)
     full_url = models.URLField()
-    hash_url = models.CharField(max_length=30, unique=True)  # TODO: rename to 'hash' and create func 'short_url'
+    hash_url = models.CharField(max_length=30, unique=True)  # TODO: rename to 'hash' and create func 'short_url' (to repr as normal url?)
     clicks = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
 
