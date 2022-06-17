@@ -19,6 +19,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'shortener.apps.ShortenerConfig',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -96,5 +97,11 @@ if DEBUG:
 if 'DATABASE_URL' in os.environ:
     import dj_database_url
     DATABASES = {'default': dj_database_url.config()}
+
+# REST_FRAMEWORK = {
+#     "DEFAULT_AUTHENTICATION_CLASSES": [
+#         "rest_framework.authentication.TokenAuthentication",
+#     ]
+# }
 
 # EMAIL_BACKEND = "django_ses.SESBackend"  TODO in future
