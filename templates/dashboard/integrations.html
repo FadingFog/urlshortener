@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    API | ShortLink
+{% endblock %}
+
+{% block content %}
+    <section class="main">
+        <div class="container mt-5">
+            <div class="row">
+
+                <h5 class="text-center">ShortLink API</h5>
+
+                <div class="col-sm-8 col-md-6 mx-auto mt-3">
+                    <div class="card border border-secondary">
+                        <div class="card-body">
+                            <div class="card-top d-flex justify-content-between align-items-center">
+                                <h5 class="card-title">Your keys</h5>
+                                <button class="btn btn-outline-success btn-clear text-uppercase fw-500" type="button"
+                                        data-bs-toggle="modal" data-bs-target="#createTokenModal">
+                                    <span>Create API key</span>
+                                </button>
+                            </div>
+
+                            <ul class="list-group">
+                                {# Sectet tokens #}
+                                <div class="d-flex justify-content-between align-items-center px-3 py-2">
+                                    <div class="text-muted">Secret keys</div>
+                                    <i class="bi bi-info-square" data-bs-toggle="tooltip" title="Only 1 API key can be created at the moment"></i>
+                                </div>
+                                <div id="secretTokens">
+                                    {% for token in tokens %}
+                                    <li class="list-group-item d-flex justify-content-between align-items-center mx-3">
+                                        <span>{{ token.key }}</span>
+                                        <button class="btn btn-dark" title="deleteToken" type="button">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </li>
+                                    {% empty %}
+                                        <p class="text-muted text-center fs-7 mt-3">You don't have private keys.</p>
+                                    {% endfor %}
+                                </div>
+
+                                {# Public tokens #}
+                                <div class="text-muted px-3 py-2">Public keys</div>
+                                <div id="publicTokens">
+                                    {% for p_token in p_tokens %}  {# FIXME приватные и паблик токены разграничить или сделать как атрбиут token.private и т.п. #}
+                                    <li class="list-group-item d-flex justify-content-between align-items-center mx-3">
+                                        <span>{{ p_token.key }}<span>
+                                        <button class="btn btn-dark" title="deleteToken" type="button">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </li>
+                                    {% empty %}
+                                        <p class="text-muted text-center fs-7 mt-3">You don't have public keys.</p>
+                                    {% endfor %}
+                                </div>
+                            </ul>
+
+                            {# Modal Create Token #}
+                            <div class="modal fade" id="createTokenModal" tabindex="-1" aria-labelledby="tokenModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-md modal-dialog-centered modal-dialog-scrollable">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="tokenModalLabel">Create API key</h5>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="form-check form-switch form-switch-md">
+                                                <input class="form-check-input" type="checkbox" id="switchSecretPublic">
+                                                <label class="form-check-label" for="switchSecretPublic">Public key</label>
+                                            </div>
+                                            <p class="text-muted my-3">
+                                                This key is private and gives access to all your links. Please do not
+                                                share this key with people you do not trust. Do not include it in HTML
+                                                and JavaScript webpages and iPhone/Android apps.
+                                            </p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button class="btn btn-outline-success btn-clear text-uppercase fw-500" type="button" data-bs-dismiss="modal">
+                                                Close
+                                            </button>
+                                            <button class="btn btn-outline-success btn-clear text-uppercase fw-500" type="button" id="createToken">
+                                                Create
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-center mt-4">
+                    <a class="btn btn-outline-success text-uppercase fw-500" href="#" role="button">Visit API docs</a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block script %}
+    <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js"></script>
+    <script src="{% static 'js/csrf.js' %}"></script>
+    <script type="module" src="{% static 'js/dashboard/integrations.js' %}"></script>
+{% endblock %}

@@ -1,3 +1,5 @@
+import {initTooltips} from "./utils.js";
+
 const form = document.getElementById('shorten_form');
 const full_url = document.getElementById('id_full_url');
 
@@ -21,7 +23,6 @@ form.addEventListener('submit', ev => {
     });
 
     function handleFormSuccess(response) {
-
         if (!$("div#results").length) {  // if results do not exist append block
             let result_box = ['<div id="results" class="container mt-4"><div class="row">',
                 '<div class="col-12"><div id="alert-box"><div id="result-message">',
@@ -38,10 +39,11 @@ form.addEventListener('submit', ev => {
         } else {
             link_info.replaceWith(response.html);
         }
+
+        initTooltips()
     }
 
     function handleFormError(response) {
-
         if (!$("div#results").length) {  // if results do not exist append block
             let result_box = ['<div id="results" class="container mt-4"><div class="row">',
                 '<div class="col-12"><div id="alert-box"><div id="result-message">',
@@ -55,4 +57,16 @@ form.addEventListener('submit', ev => {
         $("#result-message").attr('class', 'alert alert-danger text-center p-2')
                             .text(errors.map(i => i.message).join('\n'));
     }
+});
+
+const n = new ClipboardJS('.btn-clipboard', {
+    target: function (trigger) {
+        return trigger.previousElementSibling;
+    }
+});
+n.on('success', (t) => {
+    document.activeElement.blur();
+    window.getSelection().removeAllRanges();
+    $(t.trigger).text('Copied!')
+    setTimeout(() => $(t.trigger).text('Copy'), 1500);
 });

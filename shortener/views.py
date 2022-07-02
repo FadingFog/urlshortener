@@ -1,3 +1,5 @@
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import PasswordResetView, PasswordResetConfirmView
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -7,8 +9,7 @@ from django.shortcuts import render, redirect
 from django.forms.models import model_to_dict
 from django.template.loader import render_to_string
 
-from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
+from rest_framework.authtoken.models import Token
 
 from .models import Url
 from .forms import CreateUserForm, CreateUrlForm, LoginUserForm, ResetPasswordForm, SetPasswordForm
@@ -64,6 +65,14 @@ def accountPage(request):
     return render(request, 'dashboard/dashboard.html', context)
 
 
+@login_required(login_url='login')
+def integrationsPage(request):
+    tokens = Token.objects.filter(user=request.user)
+
+    context = {'tokens': tokens}
+    return render(request, 'dashboard/integrations.html', context)
+
+
 def registerPage(request):
     if request.user.is_authenticated:
         return redirect('home')
@@ -117,7 +126,7 @@ def redirectURL(request, hash_url):
         url.save()
         return redirect(url.full_url)
     except:
-        raise Http404  # That URL doesn't exists
+        raise Http404  # That URL doesn't exist
 
 
 class ResetPasswordView(PasswordResetView):

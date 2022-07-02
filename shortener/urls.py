@@ -11,5 +11,6 @@ urlpatterns = [
     path('reset_password/', ResetPasswordView.as_view(), name='password_reset'),
     path('reset/<uidb64>/<token>/', ResetPasswordConfirmView.as_view(), name='password_reset_confirm'),
     path('profile/', accountPage, name='account'),
+    path('settings/integrations/', integrationsPage, name='integrations'),
     re_path(r'^(?P<hash_url>\w{10})/$', redirectURL, name='redirectURL'),
 ]

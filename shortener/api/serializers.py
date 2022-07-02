@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
+from rest_framework.authtoken.models import Token
 from rest_framework.reverse import reverse
 
 from shortener.models import Url
@@ -21,3 +22,9 @@ class UrlSerializer(serializers.ModelSerializer):
     class Meta:
         model = Url
         exclude = ('hash_url', )
+
+
+class TokenSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Token
+        fields = ('key', 'created')

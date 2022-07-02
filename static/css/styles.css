@@ -55,7 +55,15 @@ h3, .h3 {
 }
 
 .fs-7 {
+    font-size: 0.9rem;
+}
+
+.fs-18px {
     font-size: 18px;
+}
+
+.fw-500 {
+    font-weight: 500;
 }
 
 p.hint {
@@ -68,6 +76,24 @@ div.card.reset {
 
 div.card.reset a {
     padding: 6px 16px;
+}
+
+.btn.btn-clear {
+    border: transparent;
+}
+
+@media (min-width: 992px) {
+    .modal-md {
+        max-width: 600px;
+    }
+}
+
+.btn-clipboard:focus:active {
+    box-shadow: none;
+}
+
+.btn-clipboard:hover {
+    color: #00bc8c
 }
 
 /*.dropdown-menu[data-bs-popper] {*/
