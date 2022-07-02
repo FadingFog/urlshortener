@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, PasswordResetForm, SetPasswordForm as PasswordSetForm
+from django.contrib.auth.forms import UserCreationForm, PasswordResetForm, SetPasswordForm as BaseSetPasswordForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 
@@ -68,7 +68,7 @@ class ResetPasswordForm(PasswordResetForm):
     )
 
 
-class SetPasswordForm(PasswordSetForm):
+class SetPasswordForm(BaseSetPasswordForm):
     new_password1 = forms.CharField(
         max_length=100,
         widget=forms.PasswordInput(attrs={'class': 'form-control', 'id': 'floatingPassword',

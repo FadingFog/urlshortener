@@ -15,7 +15,7 @@
                         {% csrf_token %}
                         <div class="input-group input-group-lg">
                             {{ form.full_url }}
-                            <button class="btn btn-primary" type="submit">Shorten</button>
+                            <button class="btn btn-info" type="submit">Shorten</button>
                         </div>
                     </form>
                 </div>
@@ -27,12 +27,10 @@
 {% block script %}
     <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js"></script>
     <script src="{% static 'js/csrf.js' %}"></script>
-    <script src="{% static 'js/index.js' %}"></script>
+    <script type="module" src="{% static 'js/index.js' %}"></script>
     <script>
         if (window.history.replaceState) {
             window.history.replaceState(null, null, window.location.href);
          }
-
-        new ClipboardJS('.btn');
     </script>
 {% endblock script %}
