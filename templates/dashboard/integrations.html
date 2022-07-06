@@ -33,7 +33,8 @@
                                     {% for token in tokens %}
                                     <li class="list-group-item d-flex justify-content-between align-items-center mx-3">
                                         <span>{{ token.key }}</span>
-                                        <button class="btn btn-dark" title="deleteToken" type="button">
+                                        <button class="btn btn-dark" type="button" data-bs-toggle="modal"
+                                                data-bs-target="#deleteTokenModal">
                                             <i class="bi bi-trash"></i>
                                         </button>
                                     </li>
@@ -45,10 +46,11 @@
                                 {# Public tokens #}
                                 <div class="text-muted px-3 py-2">Public keys</div>
                                 <div id="publicTokens">
-                                    {% for p_token in p_tokens %}  {# FIXME приватные и паблик токены разграничить или сделать как атрбиут token.private и т.п. #}
+                                    {% for p_token in p_tokens %}  {# TODO in future #}
                                     <li class="list-group-item d-flex justify-content-between align-items-center mx-3">
-                                        <span>{{ p_token.key }}<span>
-                                        <button class="btn btn-dark" title="deleteToken" type="button">
+                                        <span>{{ p_token.key }}</span>
+                                        <button class="btn btn-dark" type="button" data-bs-toggle="modal"
+                                                data-bs-target="#deleteTokenModal">
                                             <i class="bi bi-trash"></i>
                                         </button>
                                     </li>
@@ -59,11 +61,11 @@
                             </ul>
 
                             {# Modal Create Token #}
-                            <div class="modal fade" id="createTokenModal" tabindex="-1" aria-labelledby="tokenModalLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-md modal-dialog-centered modal-dialog-scrollable">
+                            <div class="modal fade" id="createTokenModal" tabindex="-1" aria-labelledby="tokenCreateLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-md">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="tokenModalLabel">Create API key</h5>
+                                            <h5 class="modal-title" id="tokenCreateLabel">Create API key</h5>
                                         </div>
                                         <div class="modal-body">
                                             <div class="form-check form-switch form-switch-md">
@@ -82,6 +84,25 @@
                                             </button>
                                             <button class="btn btn-outline-success btn-clear text-uppercase fw-500" type="button" id="createToken">
                                                 Create
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {# Modal Delete Token #}
+                            <div class="modal fade" id="deleteTokenModal" tabindex="-1" aria-labelledby="tokenDeleteLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-sm-md">
+                                    <div class="modal-content">
+                                        <div class="modal-body">
+                                            <p class="text-center text-muted my-3">Are you sure you want to delete this key?</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button class="btn btn-outline-success btn-clear text-uppercase fw-500" type="button" data-bs-dismiss="modal">
+                                                Cancel
+                                            </button>
+                                            <button class="btn btn-outline-success btn-clear text-uppercase fw-500" type="button" id="deleteToken">
+                                                Delete
                                             </button>
                                         </div>
                                     </div>

@@ -101,19 +101,24 @@ n.on("error", t => {
 // Section - Your Keys
 let sTokens = $('#secretTokens'),
     pTokens = $('#publicTokens'),
-    deleteButton = $('[title="deleteToken"]');
+    token;
 
-let applyDeleteHandlers = () => {
-    deleteButton = $('[title="deleteToken"]');
-    deleteButton.on('click', (ev) => {
+
+$('#deleteTokenModal').on('show.bs.modal', function (e) {
+    let invoker = $(e.relatedTarget);
+    token = invoker.prev();
+});
+
+
+$('#deleteToken').on('click', (ev) => {
         ev.preventDefault()
 
-        let token = $('[title="deleteToken"]').prev().text()
         $.ajax({
             method: 'DELETE',
-            url: `/api/auth/${token}/`,
+            url: `/api/auth/${token.text()}/`,
             success: () => {
-                deleteButton.parent().remove();
+                token.parent().remove();
+                $('#deleteTokenModal').modal('hide');
                 pollForTokenChanges();
             },
             error: (error) => console.error(error),
@@ -122,8 +127,6 @@ let applyDeleteHandlers = () => {
             processData: false
         });
     });
-};
-applyDeleteHandlers()
 
 
 async function pollForTokenChanges() {
@@ -135,18 +138,18 @@ async function pollForTokenChanges() {
             let key = token.key
             let tokenContainerContent = `<li class="list-group-item d-flex justify-content-between align-items-center mx-3">
                                             <span>${key}</span>
-                                            <button class="btn btn-dark" title="deleteToken" type="button">
-                                                <i class="bi bi-trash"></i>
+                                            <button class="btn btn-dark" type="button" data-bs-toggle="modal"
+                                                data-bs-target="#deleteTokenModal">
+                                            <i class="bi bi-trash"></i>
                                             </button>
                                         </li>`
 
-            if (!token.isPublic) {  // FIXME Проверять на значение ключа isPublic а не это
+            if (!token.isPublic) {
                 sTokens.append(tokenContainerContent)
             } else {
                 pTokens.append(tokenContainerContent)
             }
         }
-        applyDeleteHandlers()
     }
 
     let tokenContainers = {'private': sTokens, 'public': pTokens};

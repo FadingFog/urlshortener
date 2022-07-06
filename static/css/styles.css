@@ -82,7 +82,10 @@ div.card.reset a {
     border: transparent;
 }
 
-@media (min-width: 992px) {
+@media (min-width: 576px) {
+    .modal-sm-md {
+        max-width: 444px;
+    }
     .modal-md {
         max-width: 600px;
     }

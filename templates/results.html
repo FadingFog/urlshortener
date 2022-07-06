@@ -1,7 +1,7 @@
 <div id="link-info">
     <ul class="list-group">
         <li id="link" class="list-group-item d-flex justify-content-between align-items-center fs-18px p-4 pt-3">
-            <span id="full-link" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ form_data.full_url }}">
+            <span class="text-truncate" id="full-link" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ form_data.full_url }}">
                 {{ form_data.full_url|truncatechars:50 }}
             </span>
             <span class="d-flex align-items-center gap-4">
