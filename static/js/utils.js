@@ -11,6 +11,19 @@ export function initTooltips() {
     const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
 }
 
+export function displayToast(msg, delay = 2000) {
+    let div = `<div class="toast toast-info fade" role="alert" aria-live="polite" aria-atomic="true" data-autohide="true" data-delay="${delay}">
+                   <div class="toast-body">
+                   ${msg}
+                   </div>
+               </div>`
+    $(document.body).append(div);
+    $('.toast').on('hidden.bs.toast', function () {
+        $(this).remove();
+    })
+    $(".toast").toast('show');
+}
+
 export function ajax(url) {
     return fetch(url)
         .then(response => {
