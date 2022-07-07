@@ -1,4 +1,4 @@
-import {genTooltip, initTooltips, ajax} from "../utils.js";
+import {genTooltip, initTooltips, displayToast, ajax} from "../utils.js";
 
 initTooltips()
 
@@ -49,6 +49,7 @@ function handleCreateSuccess(response) {
     $('#createTokenModal .modal-footer').html(newModalFooter);
 
     $('#createTokenModal #closeModal').on('click', () => setTimeout(replaceModal, 500));
+    displayToast("Api key was added successfully")
     pollForTokenChanges()
 }
 
@@ -119,6 +120,7 @@ $('#deleteToken').on('click', (ev) => {
             success: () => {
                 token.parent().remove();
                 $('#deleteTokenModal').modal('hide');
+                displayToast("API key was removed successfully")
                 pollForTokenChanges();
             },
             error: (error) => console.error(error),

@@ -99,7 +99,14 @@ div.card.reset a {
     color: #00bc8c
 }
 
-/*.dropdown-menu[data-bs-popper] {*/
-/*  margin-top: 1rem;*/
-/*}*/
+html, body {
+    margin: 0;
+    height: 100%;
+}
 
+.toast-info {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    z-index: 999;
+}
