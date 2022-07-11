@@ -1,5 +1,10 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, PasswordResetForm, SetPasswordForm as BaseSetPasswordForm
+from django.contrib.auth.forms import (
+    UserCreationForm,
+    AuthenticationForm,
+    PasswordResetForm,
+    SetPasswordForm as BaseSetPasswordForm
+)
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 
@@ -11,7 +16,8 @@ class CreateUserForm(UserCreationForm):
         max_length=100,
         widget=forms.TextInput(attrs={'class': 'form-control',
                                       'id': 'floatingInputUsername',
-                                      'placeholder': 'myusername'})
+                                      'placeholder': 'myusername',
+                                      'autocomplete': 'off'})
     )
     email = forms.EmailField(
         max_length=100,
@@ -29,7 +35,8 @@ class CreateUserForm(UserCreationForm):
         max_length=100,
         widget=forms.PasswordInput(attrs={'class': 'form-control',
                                           'id': 'floatingPasswordConfirm',
-                                          'placeholder': 'Confirm Password'})
+                                          'placeholder': 'Confirm Password',
+                                          'onfocusout': 'comparePasswords()'})
     )
 
     class Meta:
@@ -46,7 +53,7 @@ class CreateUserForm(UserCreationForm):
         raise ValidationError("A user with this email already exists.")
 
 
-class LoginUserForm(forms.Form):
+class LoginUserForm(AuthenticationForm):
     username = forms.CharField(
         max_length=100,
         widget=forms.TextInput(attrs={'class': 'form-control',
@@ -54,7 +61,7 @@ class LoginUserForm(forms.Form):
                                       'placeholder': 'myusername'})
     )
     password = forms.CharField(
-        widget=forms.PasswordInput(attrs={'class': 'form-control',
+        widget=forms.PasswordInput(attrs={'class': 'form-control mb-3',
                                           'id': 'floatingPassword',
                                           'placeholder': 'Password'})
     )

@@ -110,3 +110,24 @@ html, body {
     right: 25px;
     z-index: 999;
 }
+
+.form-control {
+    color: currentcolor;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.form-control:focus {
+    color: currentcolor;
+    background-color: #303030;
+    border-color: transparent;
+    border-bottom: 2px solid #009670;
+    box-shadow: none;
+}
+
+.form-floating > label {
+    color: #968E90;
+}
+
+input:focus + label {
+    color: #009670;
+}

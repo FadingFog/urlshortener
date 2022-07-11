@@ -1,7 +1,9 @@
-import {initTooltips} from "./utils.js";
+import {initMessages, initTooltips} from "./utils.js";
 
-const form = document.getElementById('shorten_form');
-const full_url = document.getElementById('id_full_url');
+initMessages()
+
+const form = document.getElementById('shorten_form'),
+    full_url = document.getElementById('id_full_url');
 
 
 form.addEventListener('submit', ev => {
@@ -55,7 +57,7 @@ form.addEventListener('submit', ev => {
 
         full_url.setAttribute('class', 'form-control is-invalid');
         $("#result-message").attr('class', 'alert alert-danger text-center p-2')
-                            .text(errors.map(i => i.message).join('\n'));
+            .text(errors.map(i => i.message).join('\n'));
     }
 });
 

@@ -24,6 +24,17 @@ export function displayToast(msg, delay = 2000) {
     $(".toast").toast('show');
 }
 
+export function initMessages() {
+    let message = sessionStorage.getItem('message');
+    if (!message) {
+        return;
+    }
+    $(document).ready(() => {
+        displayToast(message);
+        sessionStorage.removeItem('message');
+    });
+}
+
 export function ajax(url) {
     return fetch(url)
         .then(response => {

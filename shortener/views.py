@@ -75,6 +75,7 @@ def integrationsPage(request):
 
 def registerPage(request):
     if request.user.is_authenticated:
+        messages.warning(request, 'You are already logged in')
         return redirect('home')
 
     if request.method == 'POST':
@@ -82,9 +83,13 @@ def registerPage(request):
         if form.is_valid():
             form.save()
             user = form.cleaned_data.get('username')
-            messages.info(request, f'Now you can log in as {user}')
+            message = f'Now you can log in as {user}'
 
-            return redirect('login')
+            data = {'message': message}
+            return JsonResponse(data, status=200)
+        else:
+            data = {'errors': form.errors.get_json_data()}
+            return JsonResponse(data, status=400)
     else:
         form = CreateUserForm()
 
@@ -93,28 +98,29 @@ def registerPage(request):
 
 def loginPage(request):
     if request.user.is_authenticated:
-        messages.warning(request, 'You are already logged in')  # TODO Replace with bootstrap toasts
+        messages.warning(request, 'You are already logged in')
         return redirect('home')
 
     if request.method == 'POST':
-        form = LoginUserForm(request.POST)
+        form = LoginUserForm(data=request.POST)
         if form.is_valid():
-            username = request.POST.get('username')
-            password = request.POST.get('password')
-            user = authenticate(request, username=username, password=password)
-            if user:
-                login(request, user)
-                messages.info(request, 'Welcome back, ' + username)
-                return redirect('home')
-            else:
-                messages.warning(request, 'Username or password is incorrect')
+            user = form.get_user()
+            login(request, user)
+
+            message = f'Welcome back, {user.username}'
+            data = {'message': message}
+            return JsonResponse(data, status=200)
+        else:
+            data = {'errors': form.errors.get_json_data()}
+            return JsonResponse(data, status=400)
+
     else:
         form = LoginUserForm
 
     return render(request, 'login.html', {'form': form})
 
 
-def logoutUser(request):
+def logoutPage(request):
     logout(request)
     return redirect('home')
 

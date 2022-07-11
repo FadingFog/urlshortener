@@ -25,6 +25,13 @@
 {% endblock %}
 
 {% block script %}
+    <script>
+        {% if messages %}
+            {% for message in messages %}
+                sessionStorage.setItem('message', '{{ message }}');
+            {% endfor %}
+        {% endif %}
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js"></script>
     <script src="{% static 'js/csrf.js' %}"></script>
     <script type="module" src="{% static 'js/index.js' %}"></script>
